@@ -1,18 +1,32 @@
-"use client"
+"use client";
 
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts"
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts";
 
-export function MacroChart() {
+interface MacroChartProps {
+  protein: number;
+  carbs: number;
+  fat: number;
+}
+
+export function MacroChart({ protein, carbs, fat }: MacroChartProps) {
   const data = [
-    { name: "Protein", value: 95, goal: 120, color: "#3b82f6" },
-    { name: "Carbs", value: 160, goal: 200, color: "#22c55e" },
-    { name: "Fat", value: 45, goal: 65, color: "#eab308" },
-  ]
+    { name: "Protein", value: protein, goal: 120, color: "#3b82f6" },
+    { name: "Carbs", value: carbs, goal: 200, color: "#22c55e" },
+    { name: "Fat", value: fat, goal: 65, color: "#eab308" },
+  ];
 
   return (
     <ResponsiveContainer width="100%" height="100%">
       <PieChart>
-        <Pie data={data} cx="50%" cy="50%" innerRadius={40} outerRadius={80} paddingAngle={2} dataKey="value">
+        <Pie
+          data={data}
+          cx="50%"
+          cy="50%"
+          innerRadius={40}
+          outerRadius={80}
+          paddingAngle={2}
+          dataKey="value"
+        >
           {data.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={entry.color} />
           ))}
@@ -22,12 +36,11 @@ export function MacroChart() {
           verticalAlign="middle"
           align="right"
           formatter={(value, entry, index) => {
-            const item = data[index]
-            return `${value}: ${item.value}g / ${item.goal}g`
+            const item = data[index];
+            return `${value}: ${item.value}g / ${item.goal}g`;
           }}
         />
       </PieChart>
     </ResponsiveContainer>
-  )
+  );
 }
-
