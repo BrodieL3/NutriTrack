@@ -18,8 +18,8 @@ model Meal {
   userId    String
   name      String
   calories  Int
-  protein   Int
-  carbs     Int
-  fat       Int
+  protein   Decimal  @db.Decimal(5, 1)
+  carbs     Decimal  @db.Decimal(5, 1)
+  fat       Decimal  @db.Decimal(5, 1)
   createdAt DateTime @default(now())
 }

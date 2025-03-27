@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 
 export async function POST(request: Request) {
   try {
@@ -17,9 +18,9 @@ export async function POST(request: Request) {
       data: {
         name,
         calories: Number(calories),
-        protein: Number(protein),
-        carbs: Number(carbs),
-        fat: Number(fat),
+        protein: new Prisma.Decimal(protein),
+        carbs: new Prisma.Decimal(carbs),
+        fat: new Prisma.Decimal(fat),
         userId,
       },
     });
@@ -38,7 +39,15 @@ export async function GET() {
       orderBy: { createdAt: "desc" },
     });
 
-    return NextResponse.json(meals);
+    // Convert Decimal objects to numbers for JSON response
+    const formattedMeals = meals.map((meal) => ({
+      ...meal,
+      protein: parseFloat(meal.protein.toString()),
+      carbs: parseFloat(meal.carbs.toString()),
+      fat: parseFloat(meal.fat.toString()),
+    }));
+
+    return NextResponse.json(formattedMeals);
   } catch (error) {
     console.error("Error fetching meals:", error);
     return NextResponse.json(
